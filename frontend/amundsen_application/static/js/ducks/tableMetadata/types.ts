@@ -3,6 +3,8 @@ import {
   OwnerDict,
   PreviewData,
   PreviewQueryParams,
+  FreshnessData,
+  FreshnessQueryParams,
   TableMetadata,
   UpdateOwnerPayload,
   Tag,
@@ -131,6 +133,25 @@ export interface GetPreviewDataResponse {
   type: GetPreviewData.SUCCESS | GetPreviewData.FAILURE;
   payload: {
     data: PreviewData;
+    status: number | null;
+  };
+}
+
+export enum GetFreshnessData {
+  REQUEST = 'amundsen/freshness/GET_FRESHNESS_DATA_REQUEST',
+  SUCCESS = 'amundsen/freshness/GET_FRESHNESS_DATA_SUCCESS',
+  FAILURE = 'amundsen/freshness/GET_FRESHNESS_DATA_FAILURE',
+}
+export interface GetFreshnessDataRequest {
+  type: GetFreshnessData.REQUEST;
+  payload: {
+    queryParams: FreshnessQueryParams;
+  };
+}
+export interface GetFreshnessDataResponse {
+  type: GetFreshnessData.SUCCESS | GetFreshnessData.FAILURE;
+  payload: {
+    data: FreshnessData;
     status: number | null;
   };
 }

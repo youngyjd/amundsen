@@ -3,6 +3,8 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 import {
   PreviewData,
   PreviewQueryParams,
+  FreshnessData,
+  FreshnessQueryParams,
   TableMetadata,
   DashboardResource,
   UpdateOwnerPayload,
@@ -33,6 +35,7 @@ export type TableData = TableMetadata & {
 };
 export type DescriptionAPI = { description: string } & MessageAPI;
 export type PreviewDataAPI = { previewData: PreviewData } & MessageAPI;
+export type FreshnessDataAPI = { freshnessData: FreshnessData } & MessageAPI;
 export type TableDataAPI = { tableData: TableData } & MessageAPI;
 export type RelatedDashboardDataAPI = {
   dashboards: DashboardResource[];
@@ -177,6 +180,27 @@ export function getPreviewData(queryParams: PreviewQueryParams) {
       let data = {};
       if (response && response.data && response.data.previewData) {
         data = response.data.previewData;
+      }
+      const status = response ? response.status : null;
+      return Promise.reject({ data, status });
+    });
+}
+
+export function getFreshnessData(queryParams: FreshnessQueryParams) {
+  return axios({
+    url: '/api/freshness/v0/',
+    method: 'POST',
+    data: queryParams,
+  })
+    .then((response: AxiosResponse<FreshnessDataAPI>) => ({
+      data: response.data.freshnessData,
+      status: response.status,
+    }))
+    .catch((e: AxiosError<FreshnessDataAPI>) => {
+      const { response } = e;
+      let data = {};
+      if (response && response.data && response.data.freshnessData) {
+        data = response.data.freshnessData;
       }
       const status = response ? response.status : null;
       return Promise.reject({ data, status });

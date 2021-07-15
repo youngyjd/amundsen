@@ -62,6 +62,19 @@ export interface PreviewData {
   error_text?: string;
 }
 
+export interface FreshnessQueryParams {
+  database: string;
+  schema: string;
+  tableName: string;
+  cluster: string;
+}
+
+export interface FreshnessData {
+  columns?: PreviewColumnItem[];
+  data?: PreviewDataItem[];
+  error_text?: string;
+}
+
 export interface TableColumn {
   name: string;
   description: string;

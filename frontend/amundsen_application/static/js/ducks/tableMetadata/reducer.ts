@@ -3,6 +3,8 @@ import {
   OwnerDict,
   PreviewData,
   PreviewQueryParams,
+  FreshnessData,
+  FreshnessQueryParams,
   TableMetadata,
   Tag,
 } from 'interfaces';
@@ -26,6 +28,9 @@ import {
   GetPreviewData,
   GetPreviewDataRequest,
   GetPreviewDataResponse,
+  GetFreshnessData,
+  GetFreshnessDataRequest,
+  GetFreshnessDataResponse,
   UpdateTableOwner,
 } from './types';
 
@@ -35,6 +40,11 @@ import tableOwnersReducer, {
 } from './owners/reducer';
 
 export const initialPreviewState = {
+  data: {},
+  status: null,
+};
+
+export const initialFreshnessState = {
   data: {},
   status: null,
 };
@@ -63,6 +73,7 @@ export const initialTableDataState: TableMetadata = {
 export const initialState: TableMetadataReducerState = {
   isLoading: true,
   preview: initialPreviewState,
+  freshness: initialFreshnessState,
   statusCode: null,
   tableData: initialTableDataState,
   tableOwners: initialOwnersState,
@@ -258,6 +269,36 @@ export function getPreviewDataSuccess(
   };
 }
 
+export function getFreshnessData(
+  queryParams: FreshnessQueryParams
+): GetFreshnessDataRequest {
+  return { payload: { queryParams }, type: GetFreshnessData.REQUEST };
+}
+export function getFreshnessDataFailure(
+  data: FreshnessData,
+  status: number
+): GetFreshnessDataResponse {
+  return {
+    type: GetFreshnessData.FAILURE,
+    payload: {
+      data,
+      status,
+    },
+  };
+}
+export function getFreshnessDataSuccess(
+  data: FreshnessData,
+  status: number
+): GetFreshnessDataResponse {
+  return {
+    type: GetFreshnessData.SUCCESS,
+    payload: {
+      data,
+      status,
+    },
+  };
+}
+
 /* REDUCER */
 export interface TableMetadataReducerState {
   dashboards?: {
@@ -268,6 +309,10 @@ export interface TableMetadataReducerState {
   isLoading: boolean;
   preview: {
     data: PreviewData;
+    status: number | null;
+  };
+  freshness: {
+    data: FreshnessData;
     status: number | null;
   };
   statusCode: number | null;
@@ -323,6 +368,12 @@ export default function reducer(
     case GetPreviewData.FAILURE:
     case GetPreviewData.SUCCESS:
       return { ...state, preview: (<GetPreviewDataResponse>action).payload };
+    case GetFreshnessData.FAILURE:
+    case GetFreshnessData.SUCCESS:
+      return {
+        ...state,
+        freshness: (<GetFreshnessDataResponse>action).payload,
+      };
     case UpdateTableOwner.REQUEST:
     case UpdateTableOwner.FAILURE:
     case UpdateTableOwner.SUCCESS:
