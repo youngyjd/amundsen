@@ -17,6 +17,7 @@ ANNOUNCEMENT_CLIENT_CLASS = ('amundsen_application.base.examples.'
 class AnnouncementTest(unittest.TestCase):
 
     def setUp(self) -> None:
+        # trigger test
         local_app.config['ANNOUNCEMENT_CLIENT_ENABLED'] = True
 
     def test_no_client_class(self) -> None:
